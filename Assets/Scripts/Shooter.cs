@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class shooter : MonoBehaviour
+public class Shooter : MonoBehaviour
 {
     public GameObject candy;
     // Start is called before the first frame update
@@ -22,6 +22,7 @@ public class shooter : MonoBehaviour
     public void CandyPop()
     {
         GameObject candyPrefab = Instantiate(candy, transform);
-        candyPrefab.GetComponent<Rigidbody>().AddForce(transform.forward * 10);
+
+        candyPrefab.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
     }
 }
