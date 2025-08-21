@@ -29,6 +29,18 @@ public class NejikoController : MonoBehaviour
     float LineWidth = 1.0f;
     //移動先のライン
     int targetLine = 0;
+    //敵キャラクターと当たったに停止する時間
+    float StunTime = 0.5f;
+    //キャラクターが止まってから動き出すまでの復帰時間
+    float recoverTime;
+    //プレイヤーのHP
+    public int playerHitPoint = 3;
+
+    //キャラクターがスタン中か判断するクラス
+    bool IsStun()
+    {
+        return recoverTime > 0.0f;
+    }
 
     void Start()
     {
@@ -45,6 +57,19 @@ public class NejikoController : MonoBehaviour
             {
                 moveDirection.y = jumpPower;
             }
+        }
+
+        if (IsStun() == true)
+        {
+            moveDirection.x = 0f;
+            moveDirection.z = 0f;
+            recoverTime = Time.deltaTime;
+        }
+
+        if (IsStun() == false)
+        {
+            float movePoerZ = moveDirection.z + (speed * Time.deltaTime);
+            moveDirection.z = Mathf.Clamp(movePoerZ, 0f, speed);
         }
 
         //1フレーム毎に前進する距離の更新
@@ -72,22 +97,6 @@ public class NejikoController : MonoBehaviour
             }
         }
 
-        /*
-        if (Input.GetAxis("Vertical") > 0.0f)
-        {
-            //ねじこが前進する処理
-            moveDirection.z = Input.GetAxis("Vertical") * speed;
-        }
-        else
-        {
-            moveDirection.z = 0.0f;
-        }
-        */
-
-        //Horizontal(左右入力)があれば、ねじこを回転させる
-        //transform.Rotate(0, Input.GetAxis("Horizontal") * 3f, 0);
-
-
         //キャラクターが重力で落下する処理
         moveDirection.y = moveDirection.y - 20f * Time.deltaTime;
 
@@ -100,4 +109,19 @@ public class NejikoController : MonoBehaviour
         //ねじこのアニメーションを最新にする
         animator.SetBool("run", moveDirection.z > 0f);
     }
+
+    //敵キャラクターに当たった場合の処理を追加
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if(hit.gameObject.tag == "Robo")
+        {
+            Debug.Log("敵にぶつかった！");
+            recoverTime = StunTime;
+            playerHitPoint--;
+            //ねじこのアニメーションを再生
+            animator.SetTrigger("damage");
+            Destroy(hit.gameObject);
+        }
+    }
 }
+

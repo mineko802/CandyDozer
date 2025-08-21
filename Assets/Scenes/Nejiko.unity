@@ -153,7 +153,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 550171404}
   stageChip:
-  - {fileID: 468424858}
+  - {fileID: 114390, guid: 16de06a814a1d403fbe161e9851bc37b, type: 3}
+  - {fileID: 114390, guid: 004e980dbc6011a42893ad91d725ac43, type: 3}
   generateStageList: []
   preInstance: 5
   currentChipIndex: 0
@@ -172,12 +173,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &468424858 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5382107904130638659, guid: 4c45d068df93c0f40829a3d83a181a4c,
-    type: 3}
-  m_PrefabInstance: {fileID: 5069948861027370468}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &550171398 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7205719038485501694, guid: a780da896ca904035b33f90d86b0ba4d,
