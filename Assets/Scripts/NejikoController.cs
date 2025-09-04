@@ -32,9 +32,11 @@ public class NejikoController : MonoBehaviour
     //敵キャラクターと当たったに停止する時間
     float StunTime = 0.5f;
     //キャラクターが止まってから動き出すまでの復帰時間
-    float recoverTime;
+    float recoverTime = 0.0f;
     //プレイヤーのHP
     public int playerHitPoint = 3;
+    //外部の処理（クラス）を変数として読み込む
+    public PlayerLife playerLife;
 
     //キャラクターがスタン中か判断するクラス
     bool IsStun()
@@ -63,7 +65,7 @@ public class NejikoController : MonoBehaviour
         {
             moveDirection.x = 0f;
             moveDirection.z = 0f;
-            recoverTime = Time.deltaTime;
+            recoverTime -= Time.deltaTime;
         }
 
         if (IsStun() == false)
@@ -71,11 +73,6 @@ public class NejikoController : MonoBehaviour
             float movePoerZ = moveDirection.z + (speed * Time.deltaTime);
             moveDirection.z = Mathf.Clamp(movePoerZ, 0f, speed);
         }
-
-        //1フレーム毎に前進する距離の更新
-        float movePowerZ = moveDirection.z + (speed * Time.deltaTime);
-        //更新した距離と現在地の差分距離の計算
-        moveDirection.z = Mathf.Clamp(movePowerZ, 0f, speed);
 
         //x方向は目標のポジションまでの差分で速度を出す
         float ratioX = (targetLine * LineWidth - transform.position.x) / LineWidth;
@@ -98,7 +95,7 @@ public class NejikoController : MonoBehaviour
         }
 
         //キャラクターが重力で落下する処理
-        moveDirection.y = moveDirection.y - 20f * Time.deltaTime;
+        moveDirection.y = moveDirection.y - GravityPower * Time.deltaTime;
 
         //移動量をTransformに変換する
         Vector3 globalDirection = transform.TransformDirection(moveDirection);
@@ -121,6 +118,7 @@ public class NejikoController : MonoBehaviour
             //ねじこのアニメーションを再生
             animator.SetTrigger("damage");
             Destroy(hit.gameObject);
+            playerLife.hitFlag = true;
         }
     }
 }
